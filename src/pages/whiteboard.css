@@ -1,0 +1,479 @@
+html, body { margin: 0; height: 100%; overflow: hidden; }
+button { touch-action: manipulation; }
+/*
+ * 键盘白板（/board）的独立样式，不依赖编辑器的 Tailwind 主题。
+ * 两套主题：黑板（chalk，默认，粉笔质感）与白板（white，马克笔质感），
+ * 便签颜色用 --wb-c0..5 下标变量表示，切主题时自动换成对应的配色。
+ */
+
+.wb-root {
+  --wb-font: "Patrick Hand", "Kaiti SC", "STKaiti", "KaiTi", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --wb-ui-font: "Geist", system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  background: var(--wb-bg);
+  color: var(--wb-c0);
+  font-family: var(--wb-ui-font);
+  -webkit-font-smoothing: antialiased;
+}
+
+.wb-theme-chalk {
+  --wb-bg: #24332a;
+  --wb-grid: rgba(241, 239, 230, 0.06);
+  --wb-c0: #f1efe6;
+  --wb-c1: #f6e27f;
+  --wb-c2: #f5a7b8;
+  --wb-c3: #94cdf3;
+  --wb-c4: #a9e3a4;
+  --wb-c5: #f7b46e;
+  --wb-edge: rgba(241, 239, 230, 0.7);
+  --wb-accent: #f6e27f;
+  --wb-text-shadow: 0 0 1px currentColor;
+  --wb-ui-bg: rgba(18, 26, 21, 0.82);
+  --wb-ui-text: rgba(241, 239, 230, 0.86);
+  --wb-ui-muted: rgba(241, 239, 230, 0.55);
+  --wb-ui-border: rgba(241, 239, 230, 0.16);
+  --wb-kbd-bg: rgba(241, 239, 230, 0.1);
+}
+
+.wb-theme-white {
+  --wb-bg: #fbfbf8;
+  --wb-grid: rgba(24, 24, 27, 0.08);
+  --wb-c0: #1f2328;
+  --wb-c1: #b7791f;
+  --wb-c2: #c2255c;
+  --wb-c3: #1c6fd1;
+  --wb-c4: #2b8a3e;
+  --wb-c5: #d9480f;
+  --wb-edge: rgba(31, 35, 40, 0.6);
+  --wb-accent: #1c6fd1;
+  --wb-text-shadow: none;
+  --wb-ui-bg: rgba(255, 255, 255, 0.9);
+  --wb-ui-text: rgba(24, 24, 27, 0.86);
+  --wb-ui-muted: rgba(24, 24, 27, 0.5);
+  --wb-ui-border: rgba(24, 24, 27, 0.12);
+  --wb-kbd-bg: rgba(24, 24, 27, 0.06);
+}
+
+/* ---------- 画布 ---------- */
+
+.wb-viewport {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  cursor: default;
+  touch-action: none;
+  background-image: radial-gradient(var(--wb-grid) 1.2px, transparent 1.4px);
+}
+
+.wb-world {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-origin: 0 0;
+  will-change: transform;
+}
+
+.wb-world.is-smooth {
+  transition: transform 160ms ease-out;
+}
+
+.wb-edges {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1px;
+  height: 1px;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.wb-edges > path {
+  fill: none;
+  stroke: var(--wb-edge);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.wb-edges > path.is-preview {
+  stroke: var(--wb-accent);
+  stroke-dasharray: 6 7;
+}
+
+/* ---------- 便签 ---------- */
+
+/* 便签与编辑器共用：绝对定位 + 收缩包裹，最宽 18em 后自动换行 */
+.wb-note {
+  position: absolute;
+  box-sizing: border-box;
+  /* 世界容器是 0×0 的，不显式写 max-content 的话收缩包裹会退化成逐字换行 */
+  width: max-content;
+  min-width: 1.5em;
+  max-width: 18em;
+  padding: 0.18em 0.45em;
+  border: 2px solid transparent;
+  border-radius: 0.4em;
+  font-family: var(--wb-font);
+  line-height: 1.35;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  text-shadow: var(--wb-text-shadow);
+  user-select: none;
+  cursor: default;
+}
+
+.wb-note.frame-box {
+  border-color: currentColor;
+}
+
+/* 整条便签加粗；编辑器里的 span / textarea 通过 font: inherit 同步 */
+.wb-note.is-bold {
+  font-weight: 700;
+}
+
+.wb-note.frame-fill {
+  background: color-mix(in srgb, currentColor 16%, transparent);
+}
+
+.wb-note.is-hidden {
+  visibility: hidden;
+}
+
+.wb-note.is-selected::after,
+.wb-note.is-connect-source::after,
+.wb-editor.is-active::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border: 2px dashed var(--wb-accent);
+  border-radius: 0.6em;
+  pointer-events: none;
+}
+
+.wb-note.is-connect-source::after {
+  border-style: solid;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--wb-accent) 20%, transparent);
+}
+
+/* "笔"：普通态透明不可点，开始输入后原位显示（见 WhiteboardPage 顶部注释） */
+.wb-editor {
+  display: grid;
+  z-index: 2;
+  opacity: 0;
+  pointer-events: none;
+  user-select: text;
+}
+
+.wb-editor.is-active {
+  opacity: 1;
+  pointer-events: auto;
+  cursor: text;
+}
+
+.wb-editor.is-active::after {
+  border-style: solid;
+  opacity: 0.7;
+}
+
+/* 镜像 span 撑出尺寸，textarea 叠在同一格里，实现随内容自动伸缩 */
+.wb-editor > span,
+.wb-editor > textarea {
+  grid-area: 1 / 1;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.wb-editor > span {
+  visibility: hidden;
+}
+
+.wb-editor > textarea {
+  width: 100%;
+  height: 100%;
+  resize: none;
+  overflow: hidden;
+  background: transparent;
+  color: inherit;
+  outline: none;
+  caret-color: var(--wb-accent);
+  text-shadow: inherit;
+}
+
+/* 自由光标：虚线占位框 + 闪烁的笔尖 */
+.wb-cursor {
+  position: absolute;
+  box-sizing: border-box;
+  border: 2px dashed var(--wb-accent);
+  border-radius: 8px;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.wb-cursor::before {
+  content: "";
+  position: absolute;
+  left: 9px;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  background: var(--wb-accent);
+  animation: wb-blink 1s steps(1) infinite;
+}
+
+@keyframes wb-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.wb-empty {
+  position: absolute;
+  left: 50%;
+  top: 22%;
+  transform: translateX(-50%);
+  font-family: var(--wb-font);
+  font-size: 22px;
+  color: var(--wb-ui-muted);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* ---------- 界面外壳 ---------- */
+
+.wb-topbar {
+  position: absolute;
+  top: 12px;
+  left: 16px;
+  right: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--wb-ui-muted);
+  opacity: 0.55;
+  transition: opacity 160ms ease;
+  pointer-events: none;
+}
+
+.wb-topbar:hover {
+  opacity: 1;
+}
+
+.wb-topbar > * {
+  pointer-events: auto;
+}
+
+.wb-topbar-spacer {
+  flex: 1;
+  pointer-events: none;
+}
+
+.wb-topbar-title {
+  font-weight: 600;
+  color: var(--wb-ui-text);
+}
+
+.wb-topbar button,
+.wb-topbar-link {
+  padding: 4px 10px;
+  border: 1px solid var(--wb-ui-border);
+  border-radius: 6px;
+  background: var(--wb-ui-bg);
+  color: var(--wb-ui-text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.wb-topbar-link {
+  display: inline-block;
+  text-decoration: none;
+}
+
+@media (max-width: 720px) {
+  .wb-topbar {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .wb-topbar-spacer {
+    flex-basis: calc(100% - 160px);
+  }
+}
+
+.wb-topbar button[aria-pressed="true"] {
+  border-color: var(--wb-accent);
+  color: var(--wb-accent);
+  opacity: 1;
+}
+
+.wb-status {
+  position: absolute;
+  top: 62px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: calc(100vw - 48px);
+  box-sizing: border-box;
+  padding: 12px 18px;
+  border: 1px solid var(--wb-accent);
+  border-radius: 10px;
+  background: var(--wb-ui-bg);
+  color: var(--wb-ui-text);
+  font-size: 14px;
+  line-height: 1.6;
+  text-align: center;
+  pointer-events: none;
+}
+
+.wb-hints {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px 16px;
+  max-width: calc(100vw - 32px);
+  padding: 7px 14px;
+  border: 1px solid var(--wb-ui-border);
+  border-radius: 10px;
+  background: var(--wb-ui-bg);
+  color: var(--wb-ui-muted);
+  font-size: 12px;
+  box-sizing: border-box;
+  pointer-events: none;
+  backdrop-filter: blur(6px);
+}
+
+.wb-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.wb-hint-notice {
+  color: var(--wb-ui-text);
+}
+
+.wb-keys {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.wb-keys-or {
+  margin: 0 2px;
+  opacity: 0.6;
+}
+
+.wb-root kbd {
+  min-width: 1.4em;
+  padding: 1px 5px;
+  border: 1px solid var(--wb-ui-border);
+  border-radius: 4px;
+  background: var(--wb-kbd-bg);
+  color: var(--wb-ui-text);
+  font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+  text-align: center;
+}
+
+.wb-help-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.wb-help {
+  width: min(860px, 100%);
+  max-height: calc(100vh - 32px);
+  overflow: auto;
+  box-sizing: border-box;
+  padding: 24px 28px;
+  border: 1px solid var(--wb-ui-border);
+  border-radius: 14px;
+  background: var(--wb-ui-bg);
+  color: var(--wb-ui-text);
+  backdrop-filter: blur(12px);
+}
+
+.wb-help h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.wb-help-close {
+  float: right;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  margin: -4px -8px 0 12px;
+  border: 1px solid var(--wb-ui-border);
+  border-radius: 6px;
+  background: var(--wb-kbd-bg);
+  color: var(--wb-ui-text);
+  font: inherit;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.wb-help-close:focus-visible {
+  outline: 2px solid var(--wb-accent);
+  outline-offset: 2px;
+}
+
+.wb-help header p {
+  margin: 6px 0 18px;
+  color: var(--wb-ui-muted);
+  font-size: 13px;
+}
+
+.wb-help-groups {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 18px 28px;
+}
+
+.wb-help-group h3 {
+  margin: 0 0 8px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--wb-ui-muted);
+}
+
+.wb-help-row {
+  display: grid;
+  grid-template-columns: minmax(96px, auto) 1fr;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 0;
+  font-size: 13px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wb-world.is-smooth,
+  .wb-topbar {
+    transition: none;
+  }
+
+  .wb-cursor::before {
+    animation: none;
+  }
+}

@@ -1,0 +1,22 @@
+# ByeByeBoard
+
+> ByeByeBoard is a keyboard-first online whiteboard for teaching, meetings, and early ideas. It runs in the browser and lets people create and connect notes on a free-form canvas.
+
+## What the current app does
+
+- Start typing to create or continue a note.
+- Press Enter for the next note at the same level; press Tab for a connected child note; press Shift+Tab to continue one level up.
+- Navigate with arrow keys. Notes can also be moved, connected, and styled, including text size.
+- Export the board as PNG or JSON. The current app does not import JSON.
+- Save board content in the current browser's local storage. There is no account, cloud sync, or live collaboration.
+- Offer an English and a Chinese interface and guide.
+
+## Pages
+
+- [Open the whiteboard](https://byebyeboard.com/)
+- [Keyboard whiteboard guide](https://byebyeboard.com/guide.html)
+- [中文使用指南](https://byebyeboard.com/zh/guide.html)
+
+## Source
+
+- https://github.com/Gamehu/byebyeboard
