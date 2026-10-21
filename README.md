@@ -48,7 +48,7 @@ npm run preview # 预览构建产物
 
 鼠标同样可用：拖动便签、平移画布、缩放视图。样式快捷键在帮助面板里：`Alt` + `1–6` 换颜色，`Alt` + `B` 切外框，`Alt` + `+`/`−` 调字号，`Ctrl`/`⌘` + `B` 加粗，`Alt` + `T` 切换黑板/白板，`Ctrl`/`⌘` + `Z` 撤销。支持 6 种颜色、4 档字号和 PNG、JSON 两种导出。
 
-![完整快捷键面板](docs/images/whiteboard-shortcuts.png)
+![使用示例：输入创建便签，Enter 接同级，Tab 展开子级，Shift + Tab 回到上一级](docs/images/whiteboard-demo.gif)
 
 ## 数据与边界
 
