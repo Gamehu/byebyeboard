@@ -11,7 +11,7 @@ npm install
 npm run dev
 ```
 
-打开 http://localhost:3001 。构建与检查：
+打开 http://localhost:3001 看介绍首页，或打开 http://localhost:3001/board/ 直接进入白板。构建与检查：
 
 ```sh
 npm run lint
@@ -24,7 +24,7 @@ npm run preview
 
 ## GEO 与站点地址
 
-`public/guide.html` 和 `public/zh/guide.html` 是可直接抓取的英文、中文使用指南；白板仍在网站根路径，打开即可书写。`public/robots.txt`、`public/sitemap.xml` 和 `public/llms.txt` 使用正式域名 `https://byebyeboard.com`。上线时应确保根路径、指南和这三个文件都返回实际内容，且未知路径返回 404，而不是一律回退到白板首页。上线后再在搜索站长工具提交 sitemap 并检查抓取结果。
+根路径 `/` 和 `/zh/` 是可直接抓取的英文、中文产品介绍，`/board/` 是白板应用。`public/guide.html` 和 `public/zh/guide.html` 是可直接抓取的英文、中文使用指南。`public/robots.txt`、`public/sitemap.xml` 和 `public/llms.txt` 使用正式域名 `https://byebyeboard.com`。上线时应确保首页、白板、指南和这三个文件都返回实际内容，且未知路径返回 404。上线后再在搜索站长工具提交 sitemap 并检查抓取结果。
 
 ## Fly.io 部署
 
@@ -40,7 +40,7 @@ fly certs add www.byebyeboard.com --app byebyeboard
 fly ips list --app byebyeboard
 ```
 
-根据 `fly certs setup` 的实际输出在域名 DNS 管理处设置根域名与 `www` 的 A/AAAA 记录。不要照搬其他 Fly 应用的 IP。之后用 `fly certs check` 确认两张证书已签发，并访问根路径、两篇指南、`robots.txt`、`sitemap.xml`、`llms.txt` 与 `/healthz`；不存在的路径应返回 404。以后在仓库根目录运行 `fly deploy --app byebyeboard` 更新。回滚时可用 Fly.io 的上一版镜像重新部署，并重新检查这些路径。
+根据 `fly certs setup` 的实际输出在域名 DNS 管理处设置根域名与 `www` 的 A/AAAA 记录。不要照搬其他 Fly 应用的 IP。之后用 `fly certs check` 确认两张证书已签发，并访问 `/`、`/zh/`、`/board/`、两篇指南、`robots.txt`、`sitemap.xml`、`llms.txt` 与 `/healthz`；不存在的路径应返回 404。以后在仓库根目录运行 `fly deploy --app byebyeboard` 更新。回滚时可用 Fly.io 的上一版镜像重新部署，并重新检查这些路径。
 
 ## 功能
 

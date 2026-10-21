@@ -3,20 +3,80 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ByeByeBoard — Keyboard-first online whiteboard</title>
-    <meta name="description" content="A keyboard-first online whiteboard for lessons, meetings, and ideas. Type to create notes, use Enter and Tab to build structure, then export PNG or JSON." />
+    <title>ByeByeBoard — A keyboard-first online whiteboard</title>
+    <meta name="description" content="Capture ideas on a free-form whiteboard. Type to create notes, build branches with Enter and Tab, connect thoughts, and export PNG or JSON." />
     <link rel="canonical" href="https://byebyeboard.com/" />
+    <link rel="alternate" hreflang="en" href="https://byebyeboard.com/" />
+    <link rel="alternate" hreflang="zh-CN" href="https://byebyeboard.com/zh/" />
+    <link rel="alternate" hreflang="x-default" href="https://byebyeboard.com/" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/site.css" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://byebyeboard.com/" />
-    <meta property="og:title" content="ByeByeBoard — Keyboard-first online whiteboard" />
-    <meta property="og:description" content="Write ideas without leaving the keyboard. Create connected notes and export your board as PNG or JSON." />
+    <meta property="og:title" content="ByeByeBoard — A keyboard-first online whiteboard" />
+    <meta property="og:description" content="Give ideas room to grow. Write, branch, connect, and export on a free-form canvas." />
     <meta name="twitter:card" content="summary" />
     <script type="application/ld+json">
-      {"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://byebyeboard.com/#website","name":"ByeByeBoard","url":"https://byebyeboard.com/"},{"@type":"WebApplication","@id":"https://byebyeboard.com/#app","name":"ByeByeBoard","url":"https://byebyeboard.com/","applicationCategory":"DesignApplication","operatingSystem":"Web Browser","description":"A keyboard-first online whiteboard for lessons, meetings, and ideas.","featureList":["Create and edit notes with keyboard shortcuts","Connect notes and navigate a free-form canvas","Export boards as PNG or JSON","Save boards in the current browser's local storage"]}]}
+      {"@context":"https://schema.org","@graph":[
+        {"@type":"Organization","@id":"https://byebyeboard.com/#organization","name":"ByeByeBoard","url":"https://byebyeboard.com/","sameAs":["https://github.com/Gamehu/byebyeboard"]},
+        {"@type":"WebSite","@id":"https://byebyeboard.com/#website","name":"ByeByeBoard","url":"https://byebyeboard.com/","inLanguage":["en","zh-CN"]},
+        {"@type":"WebApplication","@id":"https://byebyeboard.com/#app","name":"ByeByeBoard","url":"https://byebyeboard.com/board/","applicationCategory":"DesignApplication","operatingSystem":"Web Browser","description":"A keyboard-first whiteboard for arranging notes and ideas on a free-form canvas.","featureList":["Create notes by typing","Branch notes with Enter and Tab","Connect and move notes","Export PNG or JSON","Store boards in the current browser"]},
+        {"@type":"FAQPage","mainEntity":[
+          {"@type":"Question","name":"Do I need an account to use ByeByeBoard?","acceptedAnswer":{"@type":"Answer","text":"No. Open the whiteboard in your browser and start writing without an account."}},
+          {"@type":"Question","name":"Where is my board saved?","acceptedAnswer":{"@type":"Answer","text":"The board is saved in this browser's local storage. There is no cloud sync, so use the PNG or JSON export to keep a separate copy."}},
+          {"@type":"Question","name":"Can I import an exported JSON file?","acceptedAnswer":{"@type":"Answer","text":"Not in the current version. JSON export is a record of the board, but the app does not yet provide an import or restore feature."}}
+        ]}
+      ]}
     </script>
   </head>
   <body>
-    <div id="root"><noscript>ByeByeBoard requires JavaScript to edit a board. Read the <a href="/guide.html">keyboard whiteboard guide</a> for features and shortcuts.</noscript></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="ByeByeBoard home"><span class="brand-mark" aria-hidden="true">B<span>↗</span></span>ByeByeBoard</a>
+      <nav aria-label="Primary navigation"><a href="#features">Features</a><a href="#how-it-works">How it works</a><a href="/guide.html">Guide</a><a href="/zh/" lang="zh-CN">中文</a><a class="button button-small" href="/board/">Open whiteboard <span aria-hidden="true">↗</span></a></nav>
+    </header>
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow">The keyboard-first whiteboard</p>
+          <h1 id="hero-title">Ideas move fast.<br><em>Keep up.</em></h1>
+          <p class="lead">Start typing, branch with a key, and connect thoughts as they take shape. ByeByeBoard gives a conversation room to grow without stopping to pick a tool.</p>
+          <div class="hero-actions"><a class="button button-large" href="/board/">Open the whiteboard <span aria-hidden="true">↗</span></a><a class="text-link" href="/guide.html">See how it works <span aria-hidden="true">→</span></a></div>
+          <p class="hero-facts">No account <span aria-hidden="true">·</span> No installation <span aria-hidden="true">·</span> Saved in this browser</p>
+        </div>
+        <div class="hero-board" role="img" aria-label="Example whiteboard: an idea branches into explore, shape, and share">
+          <div class="board-topline"><span class="board-dot"></span><span>an idea in motion</span><span class="board-topline-end">BYEBYEBOARD</span></div>
+          <svg class="board-lines" viewBox="0 0 580 410" preserveAspectRatio="none" aria-hidden="true"><path d="M180 202 C245 202 241 108 324 108 M180 202 C245 202 241 204 324 204 M180 202 C245 202 241 300 324 300" /></svg>
+          <span class="board-note note-start">Start with<br><strong>one thought</strong></span>
+          <span class="board-note note-one">Explore a direction</span>
+          <span class="board-note note-two">Shape the idea</span>
+          <span class="board-note note-three">Share the result</span>
+          <span class="board-cursor" aria-hidden="true"></span>
+          <div class="board-bottomline"><span>Enter <b>next</b></span><span>Tab <b>branch</b></span><span>Esc <b>finish</b></span></div>
+        </div>
+      </section>
+
+      <section class="section" id="features" aria-labelledby="features-title">
+        <div class="section-heading"><div><p class="eyebrow">Built for the way ideas happen</p><h2 id="features-title">Less setup. More thinking.</h2></div><p>Use the keyboard when the conversation is moving; use the canvas when the shape of an idea matters.</p></div>
+        <div class="feature-grid">
+          <article><span class="feature-index">01 / WRITE</span><h3>Start with a sentence</h3><p>Open the board and type. A note appears at the free cursor, ready for the next thought.</p></article>
+          <article><span class="feature-index">02 / BRANCH</span><h3>Grow the structure</h3><p><kbd>Enter</kbd> adds a peer note. <kbd>Tab</kbd> adds a connected child. Move, connect, and style notes as the picture changes.</p></article>
+          <article><span class="feature-index">03 / TAKE IT WITH YOU</span><h3>Export the outcome</h3><p>Download a PNG for a slide or message. Download JSON as a record of the board; this version does not yet import JSON.</p></article>
+        </div>
+      </section>
+
+      <section class="section workflow-section" id="how-it-works" aria-labelledby="workflow-title">
+        <div class="section-heading"><div><p class="eyebrow">A short path from thought to shape</p><h2 id="workflow-title">Your hands stay on the idea.</h2></div><a class="text-link" href="/guide.html">Read the complete guide <span aria-hidden="true">→</span></a></div>
+        <ol class="workflow"><li><span class="step-number">01</span><h3>Write</h3><p>Type anywhere on the board to make a note.</p></li><li><span class="step-number">02</span><h3>Expand</h3><p>Use <kbd>Enter</kbd> and <kbd>Tab</kbd> to build a quick outline.</p></li><li><span class="step-number">03</span><h3>Connect</h3><p>Move ideas around and draw links between them.</p></li><li><span class="step-number">04</span><h3>Export</h3><p>Take a PNG snapshot or save a JSON record.</p></li></ol>
+      </section>
+
+      <section class="section" aria-labelledby="uses-title"><div class="section-heading"><div><p class="eyebrow">Where it helps</p><h2 id="uses-title">A canvas for unfinished thinking.</h2></div></div><div class="use-grid"><article><h3>Teaching & workshops</h3><p>Capture questions as they arrive, then branch into explanations and examples.</p></article><article><h3>Meetings</h3><p>Keep decisions, reasons, and follow-ups visible in one shared view of the conversation.</p></article><article><h3>Personal outlining</h3><p>Start with a rough thought and find its structure without choosing a template first.</p></article></div></section>
+
+      <section class="section resources" aria-labelledby="resources-title"><div class="section-heading"><div><p class="eyebrow">Start here</p><h2 id="resources-title">Learn the board in a few minutes.</h2></div></div><div class="resource-grid"><a href="/guide.html"><span>ENGLISH GUIDE</span><strong>Keyboard whiteboard guide</strong><span aria-hidden="true">↗</span></a><a href="/zh/guide.html" lang="zh-CN"><span>中文指南</span><strong>键盘白板使用指南</strong><span aria-hidden="true">↗</span></a></div></section>
+
+      <section class="section faq" aria-labelledby="faq-title"><div class="section-heading"><div><p class="eyebrow">Good to know</p><h2 id="faq-title">A few straight answers.</h2></div></div><div class="faq-grid"><article><h3>Do I need an account?</h3><p>No. The whiteboard opens directly in your browser.</p></article><article><h3>Where does my work go?</h3><p>Your notes are saved in this browser's local storage. There is no account or cloud sync; another browser will not have the same board.</p></article><article><h3>Can I restore a JSON export?</h3><p>The current version exports JSON but does not import it. Keep a separate copy of important work, and use PNG when you need to share an image.</p></article><article><h3>Can I work with others live?</h3><p>Live collaboration is not available yet. You can export a PNG to share a visual snapshot.</p></article></div></section>
+
+      <section class="closing" aria-labelledby="closing-title"><p class="eyebrow">Ready when you are</p><h2 id="closing-title">Start with the next thought.</h2><a class="button button-large" href="/board/">Open the whiteboard <span aria-hidden="true">↗</span></a></section>
+    </main>
+    <footer><span>ByeByeBoard · A small space for big ideas.</span><nav aria-label="Footer navigation"><a href="/board/">Whiteboard</a><a href="/guide.html">Guide</a><a href="/zh/" lang="zh-CN">中文</a><a href="https://github.com/Gamehu/byebyeboard">GitHub</a></nav></footer>
   </body>
 </html>

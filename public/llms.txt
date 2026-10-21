@@ -13,7 +13,9 @@
 
 ## Pages
 
-- [Open the whiteboard](https://byebyeboard.com/)
+- [Product overview](https://byebyeboard.com/)
+- [中文产品介绍](https://byebyeboard.com/zh/)
+- [Open the whiteboard](https://byebyeboard.com/board/)
 - [Keyboard whiteboard guide](https://byebyeboard.com/guide.html)
 - [中文使用指南](https://byebyeboard.com/zh/guide.html)
 
