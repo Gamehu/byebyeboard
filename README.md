@@ -1,44 +1,62 @@
 # ByeByeBoard
 
-用键盘整理想法的在线白板。打开画布就能写：输入创建便签，用 Enter 和 Tab 展开层次，再移动或连接相关的想法。适合教学、会议讨论和个人梳理。
+A keyboard-first online whiteboard.
 
-线上访问：[产品介绍](https://byebyeboard.com/) · [打开白板](https://byebyeboard.com/board/) · [中文指南](https://byebyeboard.com/zh/guide.html) · [English guide](https://byebyeboard.com/guide.html)
+用键盘整理想法的在线白板：打开画布直接写，`Enter` 接一条同级，`Tab` 长出带连线的子级，再把这些想法拖到合适的位置。没有账号、模板和初始化流程，适合讲课、会议和个人梳理。
+
+[产品介绍](https://byebyeboard.com/) · [打开白板](https://byebyeboard.com/board/) · [中文指南](https://byebyeboard.com/zh/guide.html) · [English guide](https://byebyeboard.com/guide.html)
+
+![黑板主题：一段周会记录展开为目标、风险与下一步](docs/images/whiteboard-chalk.png)
 
 ## 本地运行
 
-需要 Node.js 22.12+ 和 npm。
+需要 Node.js 22.12+ 与 npm。
 
 ```sh
 npm ci
 npm run dev
 ```
 
-打开 `http://localhost:3001/` 看介绍首页，点击「进入白板」或直接打开 `http://localhost:3001/board/`。中文首页在 `/zh/`。
+- 白板：http://localhost:3001/board/
+- 英文首页：http://localhost:3001/
+- 中文首页：http://localhost:3001/zh/
+
+3001 被占用时 Vite 会顺延到下一个端口，以终端输出的地址为准。
 
 ```sh
-npm run lint   # TypeScript 类型检查
-npm test       # 白板逻辑测试
-npm run build  # 构建到 dist/
-npm run preview
+npm run lint    # TypeScript 类型检查
+npm test        # 白板模型、键盘与导出的单元测试
+npm run build   # 构建到 dist/
+npm run preview # 预览构建产物
 ```
 
 ## 怎么用
 
 | 操作 | 快捷键 |
 | --- | --- |
-| 创建或继续便签 | 直接输入 |
-| 写下一条同级便签 | Enter |
-| 写一条相连的子级便签 | Tab |
-| 返回上一级 | Shift + Tab |
-| 在便签内换行 | Shift + Enter |
-| 完成编辑 | Esc |
-| 查看完整快捷键 | F1 或 Ctrl/⌘ + / |
+| 新建便签，或继续写选中的便签 | 直接输入 |
+| 写完，接一条同级便签 | `Enter` |
+| 写完，展开子级（自动连线） | `Tab` |
+| 返回上一级 | `Shift` + `Tab` |
+| 便签内换行 | `Shift` + `Enter` |
+| 结束编辑 | `Esc` |
+| 跳到该方向最近的便签 | 方向键 |
+| 朝该方向延伸一条便签 | `Option`/`Alt` + 方向键 |
+| 连线或断开 | `L` 或 `Ctrl`/`⌘` + `Enter` |
+| 移动选中的便签 | `Shift` + 方向键 |
+| 完整快捷键 | `F1` 或 `Ctrl`/`⌘` + `/` |
 
-也可以用鼠标选择和拖动便签、平移或缩放画布。支持连线、颜色、字号、加粗、黑板与白板主题，以及 PNG 和 JSON 导出。完整说明见[中文指南](https://byebyeboard.com/zh/guide.html)。
+鼠标同样可用：拖动便签、平移画布、缩放视图。样式快捷键在帮助面板里：`Alt` + `1–6` 换颜色，`Alt` + `B` 切外框，`Alt` + `+`/`−` 调字号，`Ctrl`/`⌘` + `B` 加粗，`Alt` + `T` 切换黑板/白板，`Ctrl`/`⌘` + `Z` 撤销。支持 6 种颜色、4 档字号和 PNG、JSON 两种导出。
+
+![完整快捷键面板](docs/images/whiteboard-shortcuts.png)
 
 ## 数据与边界
 
-便签、连线、样式和主题保存在**当前浏览器的 localStorage**。没有账号、云同步或实时协作；换浏览器、清理站点数据或切换域名，不会自动带走白板。PNG 用于分享图片。JSON 是导出的记录，当前版本**没有 JSON 导入或恢复功能**，请勿把单独一份 JSON 导出视为已验证的备份方案。
+便签、连线、样式和主题保存在当前浏览器的 `localStorage`，键为 `byebyeboard.board`、`byebyeboard.theme`，语言单独存放。没有账号、云同步或实时协作；换浏览器、清理站点数据或换域名，白板不会跟过去。
+
+- PNG 用来分享成品。
+- JSON 是导出的记录，**当前版本不能导回**，不要把它当作备份。
+- 相机位置和撤销历史不持久化。
 
 ## 页面与技术
 
@@ -49,7 +67,18 @@ npm run preview
 | `/guide.html`、`/zh/guide.html` | 可直接抓取的使用指南 |
 | `/robots.txt`、`/sitemap.xml`、`/llms.txt` | 搜索与 AI 检索入口 |
 
-前端使用 React、TypeScript 和 Vite；部署时由 Nginx 提供静态文件，Fly.io 托管。项目没有后端或 API key。首页与指南无需 JavaScript 即可阅读；未知路径返回 404。部署命令和域名设置见 [docs/standalone.md](docs/standalone.md)。
+React 19 · TypeScript · Vite 6。构建产物是纯静态文件，由 Nginx 提供并托管在 Fly.io，没有后端、账号体系或 API key。首页和指南不依赖 JavaScript，未知路径返回 404，`/healthz` 供部署检查。页面只用本机字体，不请求外部字体服务。
+
+```
+src/components/whiteboard/  工具栏、提示条与快捷键面板
+src/lib/whiteboard/         白板模型、本地存储、PNG/JSON 导出
+src/lib/                    键盘映射与中英文案
+src/pages/                  白板页面与样式
+public/                     首页样式、指南、robots/sitemap/llms
+board/                      白板入口
+```
+
+部署、域名与证书设置见 [docs/standalone.md](docs/standalone.md)。
 
 ## Author
 
