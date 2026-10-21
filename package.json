@@ -1,6 +1,7 @@
 {
   "name": "byebyeboard",
   "version": "0.1.0",
+  "author": "Gamehu (https://github.com/Gamehu)",
   "private": true,
   "type": "module",
   "scripts": {

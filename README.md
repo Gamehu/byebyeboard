@@ -50,3 +50,7 @@ npm run preview
 | `/robots.txt`、`/sitemap.xml`、`/llms.txt` | 搜索与 AI 检索入口 |
 
 前端使用 React、TypeScript 和 Vite；部署时由 Nginx 提供静态文件，Fly.io 托管。项目没有后端或 API key。首页与指南无需 JavaScript 即可阅读；未知路径返回 404。部署命令和域名设置见 [docs/standalone.md](docs/standalone.md)。
+
+## Author
+
+© 2026 ByeByeBoard · Made by [Gamehu](https://github.com/Gamehu)
