@@ -43,6 +43,7 @@ import {
 import { loadBoard, loadBoardTheme, saveBoard, saveBoardTheme, type BoardTheme } from '../lib/whiteboard/boardStorage';
 import { downloadBoardJson, downloadBoardPng } from '../lib/whiteboard/export';
 import { MOD_KEY, WhiteboardHelp, WhiteboardHints, type HintMode } from '../components/whiteboard/WhiteboardHelp';
+import { WhiteboardTopbar } from '../components/whiteboard/WhiteboardTopbar';
 import './whiteboard.css';
 
 /** 视口相机：世界坐标 (wx, wy) 显示在屏幕 (wx * zoom + x, wy * zoom + y) */
@@ -95,6 +96,11 @@ function matchesLetter(e: React.KeyboardEvent, letter: string): boolean {
   const upper = letter.toUpperCase();
   // keyCode 是最后的兜底：个别输入法 / 浏览器在组字时只给物理键码，code 和 key 都不可靠
   return e.code === `Key${upper}` || e.key.toLowerCase() === letter || e.keyCode === upper.charCodeAt(0);
+}
+
+/** ⌘. / Ctrl+.：macOS 传统的"取消"组合键，作为 Esc 的备用 */
+function isCancelKey(e: React.KeyboardEvent): boolean {
+  return (e.metaKey || e.ctrlKey) && !e.altKey && (e.code === 'Period' || e.key === '.');
 }
 
 /** 数字键匹配：⌥+1 在 macOS 上是 ¡，同样不能只看 e.key */
@@ -157,7 +163,7 @@ function displayText(text: string): string {
 }
 
 export function WhiteboardPage() {
-  const { t, language, setLanguage } = useI18n();
+  const { t } = useI18n();
   const [initial] = useState(() => {
     const state = loadBoard();
     return { board: state, selection: initialSelection(state) };
@@ -402,7 +408,6 @@ export function WhiteboardPage() {
     setBoard(result.next);
     setEditing(null);
     select(result.selection);
-    flash(t('board.notice.editFinished'));
   }
 
   /**
@@ -499,7 +504,7 @@ export function WhiteboardPage() {
       connectTo(from, selection.kind === 'note' ? selection.id : null);
       return;
     }
-    if (e.key === 'Escape' || (e.altKey && e.code === 'KeyC')) {
+    if (e.key === 'Escape' || isCancelKey(e) || matchesLetter(e, 'l') || (e.altKey && e.code === 'KeyC')) {
       e.preventDefault();
       setConnectFrom(null);
       select({ kind: 'note', id: from });
@@ -711,6 +716,13 @@ export function WhiteboardPage() {
       return;
     }
 
+    // L（Link）：选中便签时进入连线；没选中便签时照常作为文字输入
+    if (selectedNote && !e.shiftKey && matchesLetter(e, 'l')) {
+      e.preventDefault();
+      beginConnect();
+      return;
+    }
+
     if (key === 'Enter' || key === 'F2' || key === ' ') {
       e.preventDefault();
       if (key === 'Enter' && selectedNote) createSibling(board, selectedNote.id);
@@ -760,6 +772,12 @@ export function WhiteboardPage() {
       return;
     }
     if (editing) {
+      // ⌘. / Ctrl+.：Esc 的备用键，Esc 被扩展或系统拦截时也能结束编辑
+      if (isCancelKey(e)) {
+        e.preventDefault();
+        finishEditing();
+        return;
+      }
       // 编辑中也允许缩放视图，撤销则交给 textarea 自带的文字撤销
       if ((e.metaKey || e.ctrlKey) && (e.key === '=' || e.key === '+' || e.key === '-' || e.key === '0')) {
         e.preventDefault();
@@ -1008,28 +1026,18 @@ export function WhiteboardPage() {
 
       {board.notes.length === 0 && !editing && <div className="wb-empty">{t('board.empty')}</div>}
 
-      <header className="wb-topbar" onMouseDown={(e) => e.preventDefault()}>
-        <span className="wb-topbar-title">{t('app.title')}</span>
-        <button type="button" aria-label={language === 'en' ? '切换到中文' : 'Switch to English'} onClick={() => setLanguage(language === 'en' ? 'zh' : 'en')}>{language === 'en' ? '中文' : 'EN'}</button>
-        <span className="wb-topbar-spacer" />
-        {editing && <button type="button" onClick={finishEditing}>{t('board.finishEditing')}</button>}
-        <button type="button" onClick={() => setTheme(theme === 'chalk' ? 'white' : 'chalk')}>
-          {t(theme === 'chalk' ? 'board.notice.theme.white' : 'board.notice.theme.chalk')}
-        </button>
-        <button type="button" onClick={beginConnect} disabled={!selectedNote} aria-pressed={Boolean(connectFrom)}>
-          {t('board.connect')}
-        </button>
-        <button type="button" onClick={handleDownloadPng}>{t('board.downloadPng')}</button>
-        <button type="button" onClick={handleDownloadJson}>{t('board.downloadJson')}</button>
-        <a className="wb-topbar-link" href={language === 'zh' ? '/zh/guide.html' : '/guide.html'}>{t('board.guide')}</a>
-        <button type="button" onClick={() => setShowHelp(true)}>{t('board.help')}</button>
-      </header>
+      <WhiteboardTopbar
+        theme={theme}
+        connecting={Boolean(connectFrom)}
+        canConnect={Boolean(selectedNote)}
+        onToggleTheme={() => setTheme(theme === 'chalk' ? 'white' : 'chalk')}
+        onConnect={beginConnect}
+        onDownloadPng={handleDownloadPng}
+        onDownloadJson={handleDownloadJson}
+        onShowHelp={() => setShowHelp(true)}
+      />
 
-      {(connectFrom || editing || notice) && (
-        <div className="wb-status" role="status">
-          {connectFrom ? t('board.connectMode') : editing ? t('board.editMode') : notice}
-        </div>
-      )}
+      {notice && <div className="wb-status" role="status">{notice}</div>}
       {(showHints || connectFrom) && <WhiteboardHints mode={hintMode} notice={null} />}
       {showHelp && <WhiteboardHelp onClose={() => setShowHelp(false)} />}
     </div>

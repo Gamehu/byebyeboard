@@ -33,7 +33,7 @@ const HINTS: Record<HintMode, KeyRow[]> = {
     { combos: [[ALT_KEY, ARROWS]], label: 'board.hint.grow' },
     { combos: [['Shift', ARROWS]], label: 'board.hint.nudge' },
     { combos: [[MOD_KEY, 'B']], label: 'board.hint.bold' },
-    { combos: [[ALT_KEY, 'C'], [MOD_KEY, 'Enter']], label: 'board.hint.connect' },
+    { combos: [['L'], [MOD_KEY, 'Enter']], label: 'board.hint.connect' },
     { combos: [['Del']], label: 'board.hint.delete' },
     { combos: [[MOD_KEY, '/']], label: 'board.hint.allKeys' },
   ],
@@ -42,7 +42,7 @@ const HINTS: Record<HintMode, KeyRow[]> = {
     { combos: [['Tab']], label: 'board.hint.child' },
     { combos: [['Shift', 'Tab']], label: 'board.hint.outdent' },
     { combos: [['Shift', 'Enter']], label: 'board.hint.newline' },
-    { combos: [['Esc']], label: 'board.hint.done' },
+    { combos: [['Esc'], [MOD_KEY, '.']], label: 'board.hint.done' },
   ],
   connect: [
     { combos: [[ARROWS]], label: 'board.hint.pickTarget' },
@@ -61,7 +61,7 @@ const HELP_GROUPS: Array<{ title: string; rows: KeyRow[] }> = [
       { combos: [['Tab']], label: 'board.help.childItem' },
       { combos: [['Shift', 'Tab']], label: 'board.help.outdent' },
       { combos: [['Shift', 'Enter']], label: 'board.help.newline' },
-      { combos: [['Esc']], label: 'board.help.finish' },
+      { combos: [['Esc'], [MOD_KEY, '.']], label: 'board.help.finish' },
     ],
   },
   {
@@ -77,7 +77,7 @@ const HELP_GROUPS: Array<{ title: string; rows: KeyRow[] }> = [
     rows: [
       { combos: [[ALT_KEY, ARROWS]], label: 'board.help.grow' },
       { combos: [['Shift', ARROWS]], label: 'board.help.nudge' },
-      { combos: [[ALT_KEY, 'C'], [MOD_KEY, 'Enter']], label: 'board.help.connect' },
+      { combos: [['L'], [MOD_KEY, 'Enter']], label: 'board.help.connect' },
       { combos: [['Del'], ['⌫']], label: 'board.help.delete' },
     ],
   },
@@ -174,6 +174,10 @@ export function WhiteboardHelp({ onClose }: { onClose: () => void }) {
             </div>
           ))}
         </div>
+        <footer className="wb-help-credit">
+          © 2026 ByeByeBoard · {t('board.help.madeBy')}{' '}
+          <a href="https://github.com/Gamehu" target="_blank" rel="author noopener noreferrer" onMouseDown={(e) => e.stopPropagation()}>Gamehu</a>
+        </footer>
       </section>
     </div>
   );

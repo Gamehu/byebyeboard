@@ -19,6 +19,10 @@
 - [Keyboard whiteboard guide](https://byebyeboard.com/guide.html)
 - [中文使用指南](https://byebyeboard.com/zh/guide.html)
 
+## Creator
+
+- ByeByeBoard is created and maintained by Gamehu: https://github.com/Gamehu
+
 ## Source
 
 - https://github.com/Gamehu/byebyeboard

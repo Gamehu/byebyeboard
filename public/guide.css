@@ -6,7 +6,8 @@ a:focus-visible { outline: 3px solid #145b72; outline-offset: 3px; }
 .wrap { width: min(900px, calc(100% - 36px)); margin: 0 auto; }
 header { border-bottom: 1px solid #d7ddd9; background: #fff; }
 header .wrap { min-height: 68px; display: flex; align-items: center; gap: 20px; }
-.brand { margin-right: auto; color: #20252b; font-weight: 750; font-size: 1.15rem; text-decoration: none; }
+.brand { display: inline-flex; align-items: center; gap: 9px; margin-right: auto; color: #20252b; font-weight: 750; font-size: 1.15rem; text-decoration: none; }
+.brand img { display: block; border-radius: 6px; }
 nav { display: flex; gap: 18px; flex-wrap: wrap; }
 nav a { text-decoration: none; }
 main { padding: 64px 0 80px; }

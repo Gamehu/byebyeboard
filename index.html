@@ -9,6 +9,7 @@
     <link rel="alternate" hreflang="en" href="https://byebyeboard.com/" />
     <link rel="alternate" hreflang="zh-CN" href="https://byebyeboard.com/zh/" />
     <link rel="alternate" hreflang="x-default" href="https://byebyeboard.com/" />
+    <meta name="author" content="Gamehu" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="/site.css" />
     <meta property="og:type" content="website" />
@@ -18,9 +19,10 @@
     <meta name="twitter:card" content="summary" />
     <script type="application/ld+json">
       {"@context":"https://schema.org","@graph":[
-        {"@type":"Organization","@id":"https://byebyeboard.com/#organization","name":"ByeByeBoard","url":"https://byebyeboard.com/","sameAs":["https://github.com/Gamehu/byebyeboard"]},
+        {"@type":"Organization","@id":"https://byebyeboard.com/#organization","name":"ByeByeBoard","url":"https://byebyeboard.com/","logo":"https://byebyeboard.com/favicon.svg","founder":{"@id":"https://byebyeboard.com/#creator"},"sameAs":["https://github.com/Gamehu/byebyeboard"]},
+        {"@type":"Person","@id":"https://byebyeboard.com/#creator","name":"Gamehu","url":"https://github.com/Gamehu","sameAs":["https://github.com/Gamehu"]},
         {"@type":"WebSite","@id":"https://byebyeboard.com/#website","name":"ByeByeBoard","url":"https://byebyeboard.com/","inLanguage":["en","zh-CN"]},
-        {"@type":"WebApplication","@id":"https://byebyeboard.com/#app","name":"ByeByeBoard","url":"https://byebyeboard.com/board/","applicationCategory":"DesignApplication","operatingSystem":"Web Browser","description":"A keyboard-first whiteboard for arranging notes and ideas on a free-form canvas.","featureList":["Create notes by typing","Branch notes with Enter and Tab","Connect and move notes","Export PNG or JSON","Store boards in the current browser"]},
+        {"@type":"WebApplication","@id":"https://byebyeboard.com/#app","name":"ByeByeBoard","url":"https://byebyeboard.com/board/","creator":{"@id":"https://byebyeboard.com/#creator"},"applicationCategory":"DesignApplication","operatingSystem":"Web Browser","description":"A keyboard-first whiteboard for arranging notes and ideas on a free-form canvas.","featureList":["Create notes by typing","Branch notes with Enter and Tab","Connect and move notes","Export PNG or JSON","Store boards in the current browser"]},
         {"@type":"FAQPage","mainEntity":[
           {"@type":"Question","name":"Do I need an account to use ByeByeBoard?","acceptedAnswer":{"@type":"Answer","text":"No. Open the whiteboard in your browser and start writing without an account."}},
           {"@type":"Question","name":"Where is my board saved?","acceptedAnswer":{"@type":"Answer","text":"The board is saved in this browser's local storage. There is no cloud sync, so use the PNG or JSON export to keep a separate copy."}},
@@ -31,7 +33,7 @@
   </head>
   <body>
     <header class="site-header">
-      <a class="brand" href="/" aria-label="ByeByeBoard home"><span class="brand-mark" aria-hidden="true">B<span>↗</span></span>ByeByeBoard</a>
+      <a class="brand" href="/" aria-label="ByeByeBoard home"><img class="brand-mark" src="/favicon.svg" width="30" height="30" alt="">ByeByeBoard</a>
       <nav aria-label="Primary navigation"><a href="#features">Features</a><a href="#how-it-works">How it works</a><a href="/guide.html">Guide</a><a href="/zh/" lang="zh-CN">中文</a><a class="button button-small" href="/board/">Open whiteboard <span aria-hidden="true">↗</span></a></nav>
     </header>
     <main>
@@ -77,6 +79,6 @@
 
       <section class="closing" aria-labelledby="closing-title"><p class="eyebrow">Ready when you are</p><h2 id="closing-title">Start with the next thought.</h2><a class="button button-large" href="/board/">Open the whiteboard <span aria-hidden="true">↗</span></a></section>
     </main>
-    <footer><span>ByeByeBoard · A small space for big ideas.</span><nav aria-label="Footer navigation"><a href="/board/">Whiteboard</a><a href="/guide.html">Guide</a><a href="/zh/" lang="zh-CN">中文</a><a href="https://github.com/Gamehu/byebyeboard">GitHub</a></nav></footer>
+    <footer><span>© 2026 ByeByeBoard · Made by <a href="https://github.com/Gamehu" rel="author">Gamehu</a></span><nav aria-label="Footer navigation"><a href="/board/">Whiteboard</a><a href="/guide.html">Guide</a><a href="/zh/" lang="zh-CN">中文</a><a href="https://github.com/Gamehu/byebyeboard">GitHub</a></nav></footer>
   </body>
 </html>

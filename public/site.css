@@ -13,8 +13,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .site-header, main, footer { width: min(1160px, calc(100% - 48px)); margin-inline: auto; }
 .site-header { min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 28px; border-bottom: 1px solid #dce3d9; }
 .brand { display: inline-flex; align-items: center; gap: 10px; flex: none; font-size: 1.08rem; font-weight: 780; letter-spacing: -.04em; text-decoration: none; }
-.brand-mark { display: inline-grid; place-items: center; width: 30px; height: 30px; position: relative; border-radius: 5px; background: #244b34; color: #fbf8df; font-size: 1.05rem; letter-spacing: -.07em; }
-.brand-mark span { position: absolute; top: -5px; right: -6px; font-size: .72rem; color: #b6d5ac; }
+.brand-mark { display: block; width: 30px; height: 30px; flex: none; border-radius: 7px; box-shadow: 0 1px 2px rgba(0, 0, 0, .18); }
 nav { display: flex; align-items: center; gap: clamp(13px, 2vw, 26px); font-size: .88rem; }
 nav > a:not(.button) { color: #56655b; text-decoration: none; white-space: nowrap; }
 nav > a:not(.button):hover { color: #1d3026; }
@@ -86,6 +85,8 @@ kbd { padding: 1px 5px; border: 1px solid #cbd6c9; border-radius: 4px; backgroun
 .closing h2 { margin-bottom: 25px; }
 footer { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 26px 0 42px; border-top: 1px solid #dce3d9; color: #708075; font-size: .83rem; }
 footer nav { gap: 19px; font-size: inherit; }
+footer span a { color: #3f5446; font-weight: 650; text-decoration: none; }
+footer span a:hover { color: #1d3026; text-decoration: underline; text-underline-offset: 3px; }
 
 @media (max-width: 1000px) {
   .site-header > nav { gap: 14px; }

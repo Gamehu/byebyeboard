@@ -250,7 +250,7 @@ button { touch-action: manipulation; }
 
 .wb-topbar {
   position: absolute;
-  top: 12px;
+  top: 14px;
   left: 16px;
   right: 16px;
   display: flex;
@@ -258,13 +258,7 @@ button { touch-action: manipulation; }
   gap: 12px;
   font-size: 13px;
   color: var(--wb-ui-muted);
-  opacity: 0.55;
-  transition: opacity 160ms ease;
   pointer-events: none;
-}
-
-.wb-topbar:hover {
-  opacity: 1;
 }
 
 .wb-topbar > * {
@@ -276,25 +270,183 @@ button { touch-action: manipulation; }
   pointer-events: none;
 }
 
-.wb-topbar-title {
+.wb-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 4px 6px;
+  border-radius: 8px;
+  text-decoration: none;
+  user-select: none;
+  transition: opacity 140ms ease;
+}
+
+.wb-brand:hover {
+  opacity: 0.8;
+}
+
+.wb-brand svg {
+  border-radius: 7px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
+}
+
+.wb-brand-name {
+  font-size: 14px;
   font-weight: 600;
+  letter-spacing: -0.01em;
   color: var(--wb-ui-text);
 }
 
-.wb-topbar button,
-.wb-topbar-link {
-  padding: 4px 10px;
+/* 右侧悬浮工具条：毛玻璃胶囊，平时低调，悬停时完全显现 */
+.wb-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px;
   border: 1px solid var(--wb-ui-border);
-  border-radius: 6px;
+  border-radius: 999px;
   background: var(--wb-ui-bg);
+  -webkit-backdrop-filter: blur(14px) saturate(1.4);
+  backdrop-filter: blur(14px) saturate(1.4);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 8px 24px -12px rgba(0, 0, 0, 0.25);
+  opacity: 0.72;
+  transition: opacity 160ms ease;
+}
+
+.wb-toolbar:hover,
+.wb-toolbar:focus-within {
+  opacity: 1;
+}
+
+.wb-tool {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--wb-ui-muted);
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 140ms ease, color 140ms ease;
+}
+
+.wb-tool:hover:not(:disabled) {
+  background: var(--wb-kbd-bg);
+  color: var(--wb-ui-text);
+}
+
+.wb-tool:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.wb-tool[aria-pressed="true"],
+.wb-tool[aria-expanded="true"] {
+  background: var(--wb-kbd-bg);
+  color: var(--wb-accent);
+}
+
+.wb-tool-text {
+  width: auto;
+  min-width: 32px;
+  padding: 0 10px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* 悬停提示：显示在按钮正下方 */
+.wb-tool[data-tip]::after {
+  content: attr(data-tip);
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translate(-50%, -2px);
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: var(--wb-c0);
+  color: var(--wb-bg);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 120ms ease, transform 120ms ease;
+}
+
+.wb-tool[data-tip]:hover::after {
+  opacity: 1;
+  transform: translate(-50%, 0);
+  transition-delay: 250ms;
+}
+
+.wb-toolbar > .wb-tool:last-child[data-tip]::after {
+  left: auto;
+  right: 0;
+  transform: translateY(-2px);
+}
+
+.wb-toolbar > .wb-tool:last-child[data-tip]:hover::after {
+  transform: none;
+}
+
+.wb-toolbar-divider {
+  width: 1px;
+  height: 16px;
+  margin: 0 4px;
+  background: var(--wb-ui-border);
+}
+
+.wb-menu {
+  position: relative;
+  display: inline-flex;
+}
+
+.wb-menu-list {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: -4px;
+  display: flex;
+  flex-direction: column;
+  min-width: 176px;
+  padding: 4px;
+  border: 1px solid var(--wb-ui-border);
+  border-radius: 12px;
+  background: var(--wb-ui-bg);
+  -webkit-backdrop-filter: blur(14px) saturate(1.4);
+  backdrop-filter: blur(14px) saturate(1.4);
+  box-shadow: 0 12px 32px -12px rgba(0, 0, 0, 0.35);
+}
+
+.wb-menu-list button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
   color: var(--wb-ui-text);
   font: inherit;
+  text-align: left;
   cursor: pointer;
 }
 
-.wb-topbar-link {
-  display: inline-block;
-  text-decoration: none;
+.wb-menu-list button:hover {
+  background: var(--wb-kbd-bg);
+}
+
+.wb-menu-list button span {
+  color: var(--wb-ui-muted);
+  font-size: 12px;
 }
 
 @media (max-width: 720px) {
@@ -305,19 +457,12 @@ button { touch-action: manipulation; }
   }
 
   .wb-topbar {
-    flex-wrap: wrap;
     gap: 6px;
   }
 
-  .wb-topbar-spacer {
-    flex-basis: calc(100% - 160px);
+  .wb-brand-name {
+    display: none;
   }
-}
-
-.wb-topbar button[aria-pressed="true"] {
-  border-color: var(--wb-accent);
-  color: var(--wb-accent);
-  opacity: 1;
 }
 
 .wb-status {
@@ -475,11 +620,32 @@ button { touch-action: manipulation; }
 
 @media (prefers-reduced-motion: reduce) {
   .wb-world.is-smooth,
-  .wb-topbar {
+  .wb-toolbar,
+  .wb-tool,
+  .wb-tool[data-tip]::after {
     transition: none;
   }
 
   .wb-cursor::before {
     animation: none;
   }
+}
+
+.wb-help-credit {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--wb-ui-border);
+  color: var(--wb-ui-muted);
+  font-size: 12px;
+  text-align: center;
+}
+
+.wb-help-credit a {
+  color: var(--wb-ui-text);
+  text-decoration: none;
+}
+
+.wb-help-credit a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
