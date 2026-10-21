@@ -179,13 +179,6 @@ export function WhiteboardPage() {
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const compositionActiveRef = useRef(false);
-  const [debugKey, setDebugKey] = useState('waiting');
-  useEffect(() => {
-    const report = (e: KeyboardEvent) => setDebugKey(JSON.stringify({ type: e.type, key: e.key, code: e.code, keyCode: e.keyCode, composing: e.isComposing, active: compositionActiveRef.current, target: (e.target as HTMLElement)?.tagName }));
-    window.addEventListener('keydown', report, true);
-    window.addEventListener('keyup', report, true);
-    return () => { window.removeEventListener('keydown', report, true); window.removeEventListener('keyup', report, true); };
-  }, []);
   const viewportRef = useRef<HTMLDivElement>(null);
   const cameraRef = useRef(camera);
   cameraRef.current = camera;
@@ -918,7 +911,6 @@ export function WhiteboardPage() {
 
   return (
     <div className={`wb-root wb-theme-${theme}`}>
-      <output style={{ position: 'absolute', top: 110, left: 20, zIndex: 30 }}>{debugKey}</output>
       <div
         ref={viewportRef}
         className="wb-viewport"
@@ -1003,7 +995,12 @@ export function WhiteboardPage() {
               onKeyDown={handleKeyDown}
               onCompositionStart={handleCompositionStart}
               onCompositionEnd={() => { compositionActiveRef.current = false; }}
-              onBlur={() => requestAnimationFrame(() => textareaRef.current?.focus({ preventScroll: true }))}
+              onBlur={() => {
+                // 按键扩展可能拦截 Esc 并直接 blur：先结算模式，再把键盘焦点还给白板。
+                if (showHelp) setShowHelp(false);
+                else if (editing && !compositionActiveRef.current) finishEditing();
+                requestAnimationFrame(() => textareaRef.current?.focus({ preventScroll: true }));
+              }}
             />
           </div>
         </div>
@@ -1015,6 +1012,7 @@ export function WhiteboardPage() {
         <span className="wb-topbar-title">{t('app.title')}</span>
         <button type="button" aria-label={language === 'en' ? '切换到中文' : 'Switch to English'} onClick={() => setLanguage(language === 'en' ? 'zh' : 'en')}>{language === 'en' ? '中文' : 'EN'}</button>
         <span className="wb-topbar-spacer" />
+        {editing && <button type="button" onClick={finishEditing}>{t('board.finishEditing')}</button>}
         <button type="button" onClick={() => setTheme(theme === 'chalk' ? 'white' : 'chalk')}>
           {t(theme === 'chalk' ? 'board.notice.theme.white' : 'board.notice.theme.chalk')}
         </button>

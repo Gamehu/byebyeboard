@@ -149,7 +149,7 @@ export function WhiteboardHelp({ onClose }: { onClose: () => void }) {
   const { t } = useI18n();
   return (
     <div className="wb-help-backdrop" onMouseDown={(e) => { e.preventDefault(); onClose(); }}>
-      <section className="wb-help" role="dialog" aria-modal="true" aria-label={t('board.help.title')} onMouseDown={(e) => e.stopPropagation()} onKeyDown={(e) => {
+      <section className="wb-help" role="dialog" aria-modal="true" aria-label={t('board.help.title')} onMouseDown={(e) => { e.preventDefault(); e.stopPropagation(); }} onKeyDown={(e) => {
         if (e.key === 'Escape') {
           e.preventDefault();
           e.stopPropagation();
